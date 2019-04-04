@@ -36,9 +36,8 @@ const dicionary = []
     dicionary[700] = 'setecentos'
     dicionary[800] = 'oitocentos'
     dicionary[900] = 'novecentos'
-    dicionary[1000] = 'mil'
 
-toExtenso(999.93)
+toExtenso(329461.93);
 
 function toExtenso(num){
     num = num.toString();
@@ -61,11 +60,11 @@ function fetchNumber(num){
         if( num.length == 3){
             res = centenas(num);
         }
-    //Numeros de 4 casas demaui
-        if( num.length == 4){
+    //Numeros de casas demais maior que3
+        if( num.length >3){
+            let inicio = num.slice(0,-3)
             let final = num.slice(-3);
-            let inicio = num.slice()
-            res = milhar(num);
+            res = milhar(inicio,final);
         }
     }
     return res;
@@ -76,29 +75,67 @@ function unidades(num){
 }
 
 function dezenas(num){
-    let dezenas = roundNumber(num);
-    let unidade = unidades(num[1]);
+    let stringNumber = dicionary[num];
+    if(typeof stringNumber != 'undefined'){
+        return stringNumber;
+    }
 
-    stringNumber = dicionary[dezenas] + ' e ' + unidade;
-    return stringNumber;   
+    let dezena = 0;
+    let d ;
+    let u;
+    if(num[0] != 0){
+        dezena = roundNumber(num);
+        d = dicionary[dezena];
+        u = unidades(num[1]);
+        stringNumber = d + ' e ' + u;
+    }else{
+        u = unidades(num[1]);
+        stringNumber = u;
+    }   
+    
+    return stringNumber;  
 }
 
 function centenas(num){
-    let centenas = roundNumber(num);
-    let dezenas = roundNumber(num[1]+num[2]);
-    let unidade = unidades(num[2]);
+    let stringNumber = dicionary[num];
+    if(typeof stringNumber != 'undefined'){
+        return stringNumber;
+    }
 
-    stringNumber = dicionary[centenas]+' e '+dicionary[dezenas]+ ' e ' +unidade;
+    let centena = 0;
+    let d;
+    let c;
+    if(num[0] != 0){    
+        centena = roundNumber(num);
+        c = dicionary[centena];
+        d = dezenas(num[1]+num[2]);
+        stringNumber = c +' e '+ d;
+    }else{
+        d = dezenas(num[1]+num[2]);
+        stringNumber = d;
+    }
+
     return stringNumber; 
 }
 
-function milhar(num){
-    let milhar = fetchNumber(num);
-    let centenas = roundNumber(num[1]+num[2]+num[3]);
-    let dezenas = roundNumber(num[2]+num[3]);
-    let unidade = unidades(num[3]);
+function milhar(inicio,final){
+    let milhar;
 
-    stringNumber = milhar+ ' mil e ' +dicionary[centenas]+' e '+dicionary[dezenas]+ ' e ' +unidade;
+    if(inicio.length == 1){
+        milhar = unidades(inicio);
+    }
+    if(inicio.length == 2){
+        milhar = dezenas(inicio);
+    }
+    if(inicio.length == 3){
+        milhar = centenas(inicio);
+    }
+    let resto = '';
+    if(final == 0){
+        return milhar+ ' mil ';
+    }
+    resto = centenas(final);
+    stringNumber = milhar+ ' mil e ' +resto;
     return stringNumber; 
 }
 
