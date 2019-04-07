@@ -37,30 +37,42 @@ const dicionary = []
     dicionary[800] = 'oitocentos'
     dicionary[900] = 'novecentos'
 
-toExtenso(329461.93);
+let numeroTest = 10.00
+console.log( toExtenso(numeroTest) );
 
 function toExtenso(num){
+    if(num == '' || num == 0){
+        return '';
+    }
+
     num = num.toString();
     let valor = num.split('.');
-    let reais = valor[0];
-    let centavos = valor[1];
+    let reais = valor[0].replace(/^0+/, '');
+    reais = fetchNumber(reais);
 
-teste = fetchNumber(reais);
-    console.log( teste );
+    if(typeof valor[1] != 'undefined' && parseInt(valor[1]) > 0){
+        let centavos = valor[1].replace(/^0+/, '');
+        centavos = centavos.slice(0,2);
+        centavos = fetchNumber(centavos);
+
+        return reais +' reais e '+ centavos +' centavos';
+    }
+
+    return reais + ' reais';
 }
 
 function fetchNumber(num){
     let res = dicionary[num];
     if(typeof res == 'undefined'){
-    //Numeros de cuas casa demais. (21 - 99)
+    //Numeros inteiros de duas casas (21 - 99)
         if( num.length == 2){
             res = dezenas(num);
         }
-    //Numeros de 3 casas demais. (101 - 999)
+    //Numeros inteiros de três casas (101 - 999)
         if( num.length == 3){
             res = centenas(num);
         }
-    //Numeros de casas demais maior que3
+    //Numeros inteiros com mais que 3 casas (1000 - 999999)
         if( num.length >3){
             let inicio = num.slice(0,-3)
             let final = num.slice(-3);
