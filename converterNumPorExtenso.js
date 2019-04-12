@@ -37,7 +37,7 @@ dicionary[700] = 'setecentos'
 dicionary[800] = 'oitocentos'
 dicionary[900] = 'novecentos'
 
-console.log( toExtenso('0.3') );
+console.log( toExtenso('102100.10') );
 
 
 function toExtenso(num){
@@ -149,6 +149,9 @@ function centenas(num){
         centena = roundNumber(num);
         c = dicionary[centena];
         d = dezenas(num[1]+num[2]);
+        if(c == 'cem' && d != ''){
+            c = 'cento';
+        }
         stringNumber = c +' e '+ d;
     }else{
         d = dezenas(num[1]+num[2]);
